@@ -3,3 +3,6 @@ config.py
 
 # Data repository
 /data/
+
+# Data files
+*.msg
