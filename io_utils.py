@@ -6,9 +6,10 @@ def dumps_like_a_truck(dataframe, filename=None, append=False):
     Currently this uses the pandas experimental msgpack binary format
     
     This may be edited in the future if it proves problematic"""
-
-    filename = "./data/" + strftime("%m_%d_%y.%H.%M.%S") + ".msg"
     
+    if filename is None:
+        filename = "./data/" + strftime("%m_%d_%y.%H.%M.%S") + ".msg"
+
     dataframe.to_msgpack(filename, append=append)
 
 
