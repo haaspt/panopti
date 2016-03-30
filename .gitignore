@@ -1,2 +1,5 @@
 # Configuration file
 config.py
+
+# Data repository
+/data/
