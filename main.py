@@ -24,8 +24,8 @@ def get_new_authors(post_list, author_list=None):
         author_list = []
 
     for post in post_list:
-        author_list.append(post.author.name)
+        author_list.append(post.author)
         for comment in post.comment:
-            author_list.append(comment.author.name)
+            author_list.append(comment.author)
 
     return author_list
