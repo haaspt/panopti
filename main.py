@@ -1,6 +1,6 @@
+from __future__ import print_function, division
 import io_utils
 import scraper
-from __future__ import print_function, division
 import praw
 import pandas as pd
 from config import GlobalConfig
@@ -25,7 +25,7 @@ def get_new_authors(post_list, author_list=None):
 
     for post in post_list:
         author_list.append(post.author)
-        for comment in post.comment:
+        for comment in post.comments:
             author_list.append(comment.author)
 
     return author_list
