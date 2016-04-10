@@ -6,9 +6,9 @@ import pandas as pd
 from config import Config
 
 options = Config()
-reddit = praw.Reddit(user_agent = options.reddit_config.user_agent)
+reddit = praw.Reddit(user_agent = options.user_agent)
 
-new_posts = reddit.get_subreddit(options.reddit_config.network_hub).get_new(limit=options.scraper_config.post_limit)
+new_posts = reddit.get_subreddit(options.network_hub).get_new(limit=options.post_limit)
 
 def get_new_authors(post_list, author_list=None):
     """Basic syntax to gather a list of post and comment authors
