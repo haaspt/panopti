@@ -70,7 +70,7 @@ def get_user_comments(reddit_user_object, content_dataframe=None):
     user_name = reddit_user_object.name
     user_comments = reddit_user_object.get_comments(limit=1000) # Due to reddit's caching, 1000 is the absolute max
 
-    if not content_dataframe:
+    if content_dataframe is None:
         content_dataframe = pd.DataFrame(columns=[
         'object_type',
         'user_name',
@@ -110,7 +110,7 @@ def get_user_submissions(reddit_user_object, content_dataframe=None):
     user_name = reddit_user_object.name
     user_submissions = reddit_user_object.get_submitted(limit=1000) # Due to reddit's caching, 1000 is the absolute max
 
-    if not content_dataframe:
+    if content_dataframe is None:
         content_dataframe = pd.DataFrame(columns=[
         'object_type',
         'user_name',
