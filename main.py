@@ -34,8 +34,37 @@ def get_new_authors(reddit_post_generator, author_list=None):
     print('%d new authors found!' % (len(author_df.user_name)))
     return author_df
 
+def log_author(reddit_user_object):
+    """Takes a praw user object and fetches their highest comment and submission
+    which can then be appended to the user log for caching purposes.
+
+    Returns: dict
+    """
+
+    user_name = reddit_user_object.name
+
+    newest_submission = reddit_user_object.get_submitted().next()
+    newest_submission_id = newest_submission.id
+    newest_submission_timestamp = newest_submission.created
+
+    newest_comment = reddit_user_object.get_comments().next()
+    newest_comment_id = newest_comment.id
+    newest_comment_timestamp = newest_comment.created
+
+    user_log_entry = {
+    'user_name': user_name,
+    'newest_submission_id': newest_comment_id,
+    'newest_submission_timestamp': newest_submission_timestamp,
+    'newest_comment_id': newest_comment_id,
+    'newest_comment_timestamp': newest_comment_timestamp
+    'last_searched': time.time()
+    }
+
+    return user_log_entry
+
 
 def comment_parser(reddit_comment_object):
+    """Parses a comment and returns selected parameters"""
 
     post_timestamp = reddit_comment_object.created_utc
     post_id = reddit_comment_object.id
@@ -51,6 +80,7 @@ def comment_parser(reddit_comment_object):
 
 
 def submission_parser(reddit_submission_object):
+    """Parses a submission and returns selected parameters"""
 
     post_timestamp = reddit_submission_object.created_utc
     post_id = reddit_submission_object.id
@@ -66,6 +96,13 @@ def submission_parser(reddit_submission_object):
 
 
 def get_user_comments(reddit_user_object, content_dataframe=None):
+    """Takes a praw user object and iterates through his/her comment history.
+    Certain comment parameters are parsed are appended to a pandas dataframe.
+
+    Takes and optional content_dataframe
+
+    Returns content_dataframe
+    """
 
     user_name = reddit_user_object.name
     user_comments = reddit_user_object.get_comments(limit=1000) # Due to reddit's caching, 1000 is the absolute max
@@ -106,7 +143,14 @@ def get_user_comments(reddit_user_object, content_dataframe=None):
 
 
 def get_user_submissions(reddit_user_object, content_dataframe=None):
+    """Takes a praw user object and iterates through his/her submission history.
+    Certain comment parameters are parsed are appended to a pandas dataframe.
 
+    Takes and optional content_dataframe
+
+    Returns content_dataframe
+    """
+    
     user_name = reddit_user_object.name
     user_submissions = reddit_user_object.get_submitted(limit=1000) # Due to reddit's caching, 1000 is the absolute max
 
