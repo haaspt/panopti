@@ -36,6 +36,7 @@ def get_new_authors(reddit_post_generator, author_list=None):
 def comment_parser(reddit_comment_object):
 
     post_timestamp = reddit_comment_object.created_utc
+    post_id = reddit_comment_object.id
     score = reddit_comment_object.score
     ups = reddit_comment_object.ups
     downs = reddit_comment_object.downs
@@ -45,7 +46,7 @@ def comment_parser(reddit_comment_object):
     link_author = reddit_comment_object.link_author
     subreddit = reddit_comment_object.subreddit.display_name
 
-    return post_timestamp, score, ups, downs, post_body, link_title, link_id, link_author, subreddit
+    return post_timestamp, post_id, score, ups, downs, post_body, link_title, link_id, link_author, subreddit
 
 
 def get_user_comments(reddit_user_object, comment_dataframe=None):
@@ -57,6 +58,7 @@ def get_user_comments(reddit_user_object, comment_dataframe=None):
         comment_dataframe = pd.DataFrame(columns=[
         'user_name',
         'post_timestamp',
+        'post_id',
         'score',
         'ups',
         'downs',
@@ -69,10 +71,11 @@ def get_user_comments(reddit_user_object, comment_dataframe=None):
         ])
 
     for comment in user_comments:
-        post_timestamp, score, ups, downs, post_body, link_title, link_id, link_author, subreddit = comment_parser(comment)
+        post_timestamp, post_id, score, ups, downs, post_body, link_title, link_id, link_author, subreddit = comment_parser(comment)
         comment_dataframe = comment_dataframe.append({
         'user_name': user_name,
         'post_timestamp': post_timestamp,
+        'post_id': post_id,
         'score': score,
         'ups': ups,
         'downs': downs,
