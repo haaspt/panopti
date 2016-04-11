@@ -4,5 +4,9 @@ config.py
 # Data repository
 /data/
 
+# Log repository
+/log/
+
 # Data files
 *.msg
+*.pkl
