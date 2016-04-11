@@ -27,5 +27,5 @@ def main():
     io_utils.save_log(log_df)
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main()
