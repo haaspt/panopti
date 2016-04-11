@@ -12,27 +12,25 @@ reddit = praw.Reddit(user_agent = options.user_agent)
 
 new_posts = reddit.get_subreddit(options.network_hub).get_new(limit=options.post_limit)
 
-def get_new_authors(reddit_post_generator, author_list=None):
-    """Basic syntax to gather a list of post and comment authors
-    gathered from new posts on the target subreddit
+def get_new_authors(reddit_post_generator, author_series=None):
+    """Takes a reddit post generator object and an optional pandas series.
+    Iterates through the generator and adds praw user objects to the series
+    if the author has not already been added.
 
-    To Do:
-    - More structured data processing
-    - Maybe flatten the comment tree?
+    Returns: pd.series
     """
 
-    if not author_list:
-        author_list = []
+    if author_series is None:
+        author_series = pd.Series()
 
     for post in reddit_post_generator:
-        author_list.append(post.author.name)
+        if post.author not in author_series.values:
+            author_series = author_series.append(pd.Series(post.author))
         for comment in post.comments:
-            author_list.append(comment.author.name)
+            if comment.author not in author_series.values:
+                author_series = author_series.append(pd.Series(comment.author))
 
-    author_df = pd.DataFrame({'user_name': author_list, 'highest_post_id': ""})
-    author_df = author_df.drop_duplicates('user_name')
-    print('%d new authors found!' % (len(author_df.user_name)))
-    return author_df
+    return author_series
 
 def log_author(reddit_user_object):
     """Takes a praw user object and fetches their highest comment and submission
@@ -150,7 +148,7 @@ def get_user_submissions(reddit_user_object, content_dataframe=None):
 
     Returns content_dataframe
     """
-    
+
     user_name = reddit_user_object.name
     user_submissions = reddit_user_object.get_submitted(limit=1000) # Due to reddit's caching, 1000 is the absolute max
 
