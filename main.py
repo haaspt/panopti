@@ -54,7 +54,7 @@ def log_author(reddit_user_object):
     'newest_submission_id': newest_comment_id,
     'newest_submission_timestamp': newest_submission_timestamp,
     'newest_comment_id': newest_comment_id,
-    'newest_comment_timestamp': newest_comment_timestamp
+    'newest_comment_timestamp': newest_comment_timestamp,
     'last_searched': time.time()
     }
 
