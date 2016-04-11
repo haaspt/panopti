@@ -7,26 +7,6 @@ import pandas as pd
 import numpy as np
 from config import Config
 
-def main():
-
-    options = Config()
-    reddit = praw.Reddit(user_agent = options.user_agent)
-
-    post_generator = reddit.get_subreddit(options.network_hub).get_top(limit=options.post_limit)
-
-    user_series = get_new_authors(post_generator)
-    content_df = pd.DataFrame()
-    log_df = io_utils.load_log()
-
-    for user in user_series: #Look up proper pd.series iteration syntax
-        content_df = get_user_comments(user, content_dataframe=content_df)
-        content_df = get_user_submissions(user, content_dataframe=content_df)
-
-        log_df = log_user(user, log_dataframe=log_df)
-
-    io_utils.dumps_like_a_truck(content_df)
-    io_utils.save_log(log_df)
-
 
 def get_new_authors(reddit_post_generator, author_series=None):
     """Takes a reddit post generator object and an optional pandas series.
@@ -210,3 +190,28 @@ def get_user_submissions(reddit_user_object, content_dataframe=None):
         'timestamp': time.time()}, ignore_index=True)
 
     return content_dataframe
+
+
+def main():
+
+    options = Config()
+    reddit = praw.Reddit(user_agent = options.user_agent)
+
+    post_generator = reddit.get_subreddit(options.network_hub).get_top(limit=options.post_limit)
+
+    user_series = get_new_authors(post_generator)
+    content_df = pd.DataFrame()
+    log_df = io_utils.load_log()
+
+    for user in user_series: #Look up proper pd.series iteration syntax
+        content_df = get_user_comments(user, content_dataframe=content_df)
+        content_df = get_user_submissions(user, content_dataframe=content_df)
+
+        log_df = log_user(user, log_dataframe=log_df)
+
+    io_utils.dumps_like_a_truck(content_df)
+    io_utils.save_log(log_df)
+
+
+if __name__ == "main":
+    main()
