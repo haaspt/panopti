@@ -24,14 +24,12 @@ def get_new_authors(reddit_post_generator, author_series=None):
         author_series = pd.Series()
 
     for post in reddit_post_generator:
-        if post.author is not None:
-            if post.author not in author_series.values:
-                author_series = author_series.append(pd.Series({len(author_series): post.author}))
+        if post.author is not None and post.author not in author_series.values:
+            author_series = author_series.append(pd.Series({len(author_series): post.author}))
         post.replace_more_comments(limit=16, threshold=5)
         for comment in praw.helpers.flatten_tree(post.comments):
-            if comment.author is not None:
-                if comment.author not in author_series.values:
-                    author_series = author_series.append(pd.Series({len(author_series): post.author}))
+            if comment.author is not None and comment.author not in author_series.values:
+                author_series = author_series.append(pd.Series({len(author_series): post.author}))
 
     author_series = author_series.drop_duplicates() #Not sure why there are duplicates, but there are...
     author_series.reset_index(drop=True, inplace=True)
