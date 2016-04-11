@@ -1,4 +1,6 @@
 from __future__ import print_function
+import time
+import praw
 import pandas as pd
 import numpy as np
 
@@ -38,7 +40,7 @@ def log_user(reddit_user_object, log_dataframe=None):
     if log_dataframe is None:
         log_dataframe = pd.DataFrame()
 
-    newest_submission = reddit_user_object.get_submitted().next()
+    newest_submission = reddit_user_object.get_submitted().next() # this doesn't work
     newest_submission_id = newest_submission.id
     newest_submission_timestamp = newest_submission.created
 

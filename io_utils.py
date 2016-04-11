@@ -1,13 +1,13 @@
 import pandas as pd
 from time import strftime
 
-def dumps_like_a_truck(dataframe, filename=None, append=False):
+def dumps_like_a_truck(dataframe, filename=None):
     """Saves collected dataframe to a serialized pickle format"""
 
     if filename is None:
         filename = "./data/" + strftime("%m_%d_%y.%H.%M.%S") + ".pkl"
 
-    dataframe.to_pickle(filename, append=append)
+    dataframe.to_pickle(filename)
 
 
 def pick_it_up(filename):

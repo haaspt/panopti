@@ -1,5 +1,4 @@
 from __future__ import print_function
-import time
 import io_utils
 import scraper
 import praw
@@ -18,7 +17,7 @@ def main():
     content_df = pd.DataFrame()
     log_df = io_utils.load_log()
 
-    for user in user_series: #Look up proper pd.series iteration syntax
+    for user in user_series:
         content_df = scraper.get_user_comments(user, content_dataframe=content_df)
         content_df = scraper.get_user_submissions(user, content_dataframe=content_df)
 
