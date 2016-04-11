@@ -7,10 +7,26 @@ import pandas as pd
 import numpy as np
 from config import Config
 
-options = Config()
-reddit = praw.Reddit(user_agent = options.user_agent)
+def main():
 
-new_posts = reddit.get_subreddit(options.network_hub).get_new(limit=options.post_limit)
+    options = Config()
+    reddit = praw.Reddit(user_agent = options.user_agent)
+
+    post_generator = reddit.get_subreddit(options.network_hub).get_top(limit=options.post_limit)
+
+    user_series = get_new_authors(post_generator)
+    content_df = pd.DataFrame()
+    log_df = pd.DataFrame() # io_utils.load_log()
+
+    for user in user_series: #Look up proper pd.series iteration syntax
+        content_df = get_user_comments(user, content_dataframe=content_df)
+        content_df = get_user_submissions(user, content_dataframe=content_df)
+
+        log_df = log_user(user, log_dataframe=log_df)
+
+    io_utils.dumps_like_a_truck(content_df)
+    #io_utils.save_log(log_df)
+
 
 def get_new_authors(reddit_post_generator, author_series=None):
     """Takes a reddit post generator object and an optional pandas series.
@@ -36,14 +52,16 @@ def get_new_authors(reddit_post_generator, author_series=None):
 
     return author_series
 
-def log_author(reddit_user_object):
+
+def log_user(reddit_user_object, log_dataframe=None):
     """Takes a praw user object and fetches their highest comment and submission
     which can then be appended to the user log for caching purposes.
 
-    Returns: dict
+    Returns: pd.DataFrame
     """
 
-    user_name = reddit_user_object.name
+    if log_dataframe is None:
+        log_dataframe = pd.DataFrame()
 
     newest_submission = reddit_user_object.get_submitted().next()
     newest_submission_id = newest_submission.id
@@ -62,7 +80,10 @@ def log_author(reddit_user_object):
     'last_searched': time.time()
     }
 
-    return user_log_entry
+    log_dataframe = log_dataframe.append(data=user_log_entry)
+    log_dataframe.reset_index(drop=True, inplace=True)
+
+    return log_dataframe
 
 
 def comment_parser(reddit_comment_object):
