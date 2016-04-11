@@ -28,7 +28,7 @@ def load_log(filename="./log/log_file.pkl"):
     return log_file
 
 
-def save_log(log_dataframe, filename="./log/log_file.pkl")
+def save_log(log_dataframe, filename="./log/log_file.pkl"):
 
     log_dataframe.to_pickle(filename)
     print("Log file saved to disk!")
