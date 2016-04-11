@@ -16,7 +16,7 @@ def main():
 
     user_series = get_new_authors(post_generator)
     content_df = pd.DataFrame()
-    log_df = pd.DataFrame() # io_utils.load_log()
+    log_df = io_utils.load_log()
 
     for user in user_series: #Look up proper pd.series iteration syntax
         content_df = get_user_comments(user, content_dataframe=content_df)
@@ -25,7 +25,7 @@ def main():
         log_df = log_user(user, log_dataframe=log_df)
 
     io_utils.dumps_like_a_truck(content_df)
-    #io_utils.save_log(log_df)
+    io_utils.save_log(log_df)
 
 
 def get_new_authors(reddit_post_generator, author_series=None):
