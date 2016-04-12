@@ -40,6 +40,7 @@ def log_user(reddit_user_object, log_dataframe=None):
     if log_dataframe is None:
         log_dataframe = pd.DataFrame()
 
+    user_name = reddit_user_object.name
     newest_submission = reddit_user_object.get_submitted().next() # this doesn't work
     newest_submission_id = newest_submission.id
     newest_submission_timestamp = newest_submission.created
@@ -57,7 +58,7 @@ def log_user(reddit_user_object, log_dataframe=None):
     'last_searched': time.time()
     }
 
-    log_dataframe = log_dataframe.append(data=user_log_entry)
+    log_dataframe = log_dataframe.append(user_log_entry, ignore_index=True)
     log_dataframe.reset_index(drop=True, inplace=True)
 
     return log_dataframe
