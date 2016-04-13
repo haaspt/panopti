@@ -14,18 +14,30 @@ def main():
     post_generator = reddit.get_subreddit(options.network_hub).get_new(limit=options.post_limit)
 
     user_series = scraper.get_new_authors(post_generator)
-    content_df = pd.DataFrame()
-    #log_df = io_utils.load_log()
+    content_df = pd.DataFrame(columns=['downs', 'object_type', 'post_body',
+    'post_id', 'post_timestamp', 'score', 'subreddit', 'thread_title',
+    'thread_url', 'timestamp', 'ups', 'user_name'])
+    log_df = io_utils.load_log()
 
     for user in user_series:
-        content_df = scraper.get_user_comments(user, content_dataframe=content_df)
-        content_df = scraper.get_user_submissions(user, content_dataframe=content_df)
+        if not (log_df.user_name.ix[log_df.object_type == 'comment'] == user.name).any():
+            #Check if user already has a comment logged in the log dataframe
+            content_df = scraper.get_user_comments(user, content_dataframe=content_df)
 
-        #log_df = scraper.log_user(user, log_dataframe=log_df)
+        if not (log_df.user_name.ix[log_df.object_type == 'submission'] == user.name).any():
+            # Check if user already has a submission logged in the log dataframe
+            content_df = scraper.get_user_submissions(user, content_dataframe=content_df)
+
+    # Logging syntax needs to be steamlined...
+    new_users_to_log = content_df[['user_name', 'object_type', 'post_id', 'post_timestamp']].ix[content_df.groupby(['user_name', 'object_type']).post_timestamp.idxmax()]
+    log_df = log_df.append(new_users_to_log)
+    log_df = log_df.reset_index()
+    io_utils.save_log(log_df)
 
     io_utils.dumps_like_a_truck(content_df)
-    #io_utils.save_log(log_df)
 
+    print("Logged %d new users!" % len(new_users_to_log.user_name.unique()))
+    print("Logged %d new posts!" % len(content_df.user_name.unique()))
 
 if __name__ == "__main__":
     main()
