@@ -1,2 +1,2 @@
 # panopti
-A social network analizer/visualizer using Python
+A social network analyzer/visualizer using Python
