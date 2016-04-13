@@ -31,7 +31,7 @@ def main():
     # Logging syntax needs to be steamlined...
     new_users_to_log = content_df[['user_name', 'object_type', 'post_id', 'post_timestamp']].ix[content_df.groupby(['user_name', 'object_type']).post_timestamp.idxmax()]
     log_df = log_df.append(new_users_to_log)
-    log_df = log_df.reset_index()
+    log_df = log_df.reset_index(drop=True)
     io_utils.save_log(log_df)
 
     io_utils.dumps_like_a_truck(content_df)
