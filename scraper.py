@@ -28,41 +28,7 @@ def get_new_authors(reddit_post_generator, author_series=None):
     author_series.reset_index(drop=True, inplace=True)
 
     return author_series
-
-
-def log_user(reddit_user_object, log_dataframe=None):
-    """Takes a praw user object and fetches their highest comment and submission
-    which can then be appended to the user log for caching purposes.
-
-    Returns: pd.DataFrame
-    """
-
-    if log_dataframe is None:
-        log_dataframe = pd.DataFrame()
-
-    user_name = reddit_user_object.name
-    newest_submission = reddit_user_object.get_submitted().next() # this doesn't work
-    newest_submission_id = newest_submission.id
-    newest_submission_timestamp = newest_submission.created
-
-    newest_comment = reddit_user_object.get_comments().next()
-    newest_comment_id = newest_comment.id
-    newest_comment_timestamp = newest_comment.created
-
-    user_log_entry = {
-    'user_name': user_name,
-    'newest_submission_id': newest_comment_id,
-    'newest_submission_timestamp': newest_submission_timestamp,
-    'newest_comment_id': newest_comment_id,
-    'newest_comment_timestamp': newest_comment_timestamp,
-    'last_searched': time.time()
-    }
-
-    log_dataframe = log_dataframe.append(user_log_entry, ignore_index=True)
-    log_dataframe.reset_index(drop=True, inplace=True)
-
-    return log_dataframe
-
+    
 
 def comment_parser(reddit_comment_object):
     """Parses a comment and returns selected parameters"""
