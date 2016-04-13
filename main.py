@@ -37,7 +37,7 @@ def main():
     io_utils.dumps_like_a_truck(content_df)
 
     print("Logged %d new users!" % len(new_users_to_log.user_name.unique()))
-    print("Logged %d new posts!" % len(content_df)
+    print("Logged %d new posts!" % len(content_df))
 
 if __name__ == "__main__":
     main()
