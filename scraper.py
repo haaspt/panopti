@@ -1,3 +1,4 @@
+#!/usr/local/bin/env python
 from __future__ import print_function
 import time
 import praw
@@ -28,7 +29,7 @@ def get_new_authors(reddit_post_generator, author_series=None):
     author_series.reset_index(drop=True, inplace=True)
 
     return author_series
-    
+
 
 def comment_parser(reddit_comment_object):
     """Parses a comment and returns selected parameters"""
